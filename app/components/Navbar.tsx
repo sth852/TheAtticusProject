@@ -47,9 +47,9 @@ export default function Navbar() {
         {/* ── Logo + Site Name ───────────────────────────────────────────── */}
         {/* Clicking the logo always goes back to the homepage */}
         <Link href="/" style={{ display: "flex", alignItems: "center", gap: "0.6rem", textDecoration: "none", flexShrink: 0 }}>
-          {/* Logo image — stored in /public/AtticusLogo.avif */}
+          {/* Logo image — stored in /public/AtticusLogo.png */}
           <Image
-            src="/AtticusLogo.avif"
+            src="/AtticusLogo.png"
             alt="The Atticus Project"
             width={44}
             height={44}

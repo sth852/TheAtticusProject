@@ -34,7 +34,7 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <Link href="/" style={{ display: "inline-flex", alignItems: "center", gap: "0.6rem", marginBottom: "1rem", textDecoration: "none" }}>
-              <Image src="/AtticusLogo.avif" alt="Atticus" width={38} height={38} style={{ objectFit: "contain" }} />
+              <Image src="/AtticusLogo.png" alt="Atticus" width={38} height={38} style={{ objectFit: "contain" }} />
               <span style={{ fontFamily: "var(--font-playfair)", fontSize: "1rem", fontWeight: "700", color: "white" }}>
                 The <span style={{ color: "var(--slate)" }}>Atticus</span> Project
               </span>

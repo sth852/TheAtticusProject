@@ -14,7 +14,7 @@
 //   - Mission card text: find the array with "Expert Research", "How to Participate"
 //   - Datasets card text: find the array with "CUAD", "MAUD", "ACORD"
 //   - CTA buttons: find the <Link> tags at the bottom of each section
-//   - Logo image: stored in /public/AtticusLogo.avif
+//   - Logo image: stored in /public/AtticusLogo.png
 //
 // NOTE: This page is a "use client" component (needed for hover animations).
 //   To change the browser tab title, update `metadata.title` in app/layout.tsx.
@@ -48,7 +48,7 @@ export default function Home() {
                   borderRadius: "50%",
                 }} />
                 <Image
-                  src="/AtticusLogo.avif"
+                  src="/AtticusLogo.png"
                   alt="The Atticus Project"
                   width={260}
                   height={260}
