@@ -194,81 +194,14 @@ export default function Home() {
       {/* ── Courses & Workshops ───────────────────────────────── */}
       <section className="section bg-white">
         <div className="container">
-          <div style={{ textAlign: "center", marginBottom: "3.5rem" }}>
+          <div style={{ textAlign: "center", marginBottom: "2.5rem" }}>
             <span className="label-tag">Professional Development</span>
             <h2 style={{ marginTop: "0.25rem" }}>Courses &amp; Workshops</h2>
             <div className="divider divider-center" />
-            <p style={{ color: "var(--text-muted)", maxWidth: "520px", margin: "0 auto", fontSize: "0.95rem", lineHeight: "1.75" }}>
-              MCLE-accredited courses from Berkeley and Stanford Law, plus tailored corporate AI workshops for legal teams.
-            </p>
           </div>
-
-          {/* MCLE course cards */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.25rem", marginBottom: "2.5rem" }}>
-            {[
-              {
-                schoolBg: "#003262",
-                schoolAccent: "#FDB515",
-                school: "UC Berkeley Law",
-                title: "Generative AI for the Legal Profession",
-                href: "https://executive.law.berkeley.edu/programs/generative-ai-for-the-legal-profession/",
-              },
-              {
-                schoolBg: "#003262",
-                schoolAccent: "#FDB515",
-                school: "UC Berkeley Law",
-                title: "Commercial Contract Fundamentals",
-                href: "https://executive.law.berkeley.edu/programs/commercial-contract-fundamentals/",
-              },
-              {
-                schoolBg: "#8C1515",
-                schoolAccent: "white",
-                school: "Stanford Law",
-                title: "AI Strategy for Legal Leaders",
-                href: "https://law.stanford.edu/executive-education/ai-strategy-for-legal-leaders/",
-              },
-            ].map((course) => (
-              <a key={course.title} href={course.href} target="_blank" rel="noopener noreferrer"
-                style={{ textDecoration: "none", display: "flex", flexDirection: "column", borderRadius: "var(--radius-md)", overflow: "hidden", border: "1px solid var(--border)", boxShadow: "var(--shadow-sm)", transition: "transform 200ms ease, box-shadow 200ms ease" }}
-                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(-4px)"; (e.currentTarget as HTMLElement).style.boxShadow = "0 12px 40px rgba(0,0,0,0.12)"; }}
-                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(0)"; (e.currentTarget as HTMLElement).style.boxShadow = "var(--shadow-sm)"; }}
-              >
-                {/* School color header */}
-                <div style={{ backgroundColor: course.schoolBg, padding: "1.25rem 1.5rem" }}>
-                  <p style={{ fontFamily: "var(--font-playfair)", fontSize: "0.95rem", fontWeight: "700", color: course.schoolAccent, margin: 0 }}>{course.school}</p>
-                </div>
-                <div style={{ padding: "1.25rem 1.5rem", flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between", gap: "1rem" }}>
-                  <h4 style={{ fontSize: "0.97rem", fontWeight: "700", color: "var(--ink)", margin: 0, lineHeight: 1.4 }}>{course.title}</h4>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                    <span style={{ background: "var(--ink)", color: "white", fontSize: "0.68rem", fontWeight: "700", padding: "0.25rem 0.6rem", borderRadius: "3px", letterSpacing: "0.06em" }}>MCLE Accredited</span>
-                    <span style={{ fontSize: "0.82rem", fontWeight: "700", color: "var(--slate-dark)" }}>Register →</span>
-                  </div>
-                </div>
-              </a>
-            ))}
-          </div>
-
-          {/* Workshops banner */}
-          <div style={{
-            background: "linear-gradient(135deg, var(--ink) 0%, #162038 100%)",
-            borderRadius: "var(--radius-md)",
-            padding: "2.5rem 3rem",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            gap: "2rem",
-            flexWrap: "wrap",
-          }}>
-            <div>
-              <p style={{ fontFamily: "var(--font-dm-sans)", fontSize: "0.72rem", fontWeight: "700", letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--slate)", marginBottom: "0.5rem" }}>For Legal Teams</p>
-              <h3 style={{ color: "white", margin: "0 0 0.5rem", fontSize: "1.35rem" }}>Corporate AI Workshops</h3>
-              <p style={{ color: "rgba(255,255,255,0.6)", margin: 0, fontSize: "0.92rem", lineHeight: "1.7", maxWidth: "480px" }}>
-                Tailored on-site sessions for in-house counsel and law firm attorneys. Led by practicing attorneys and AI researchers, customized to your team's goals and AI maturity level.
-              </p>
-            </div>
-            <Link href="/workshops" className="btn btn-slate" style={{ flexShrink: 0 }}>
-              Request a Workshop →
-            </Link>
+          <div style={{ display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap" }}>
+            <Link href="/education#courses" className="btn btn-dark">MCLE Courses</Link>
+            <Link href="/workshops" className="btn btn-outline-dark">Corporate Workshops</Link>
           </div>
         </div>
       </section>

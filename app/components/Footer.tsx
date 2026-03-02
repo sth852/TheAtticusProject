@@ -80,7 +80,6 @@ export default function Footer() {
               { href: "/education", label: "Overview" },
               { href: "/education#blog", label: "FairlyAI Blog" },
               { href: "/education#courses", label: "MCLE Courses" },
-              { href: "/bytesized-ai", label: "Bytesized AI" },
               { href: "/education#workshops", label: "Corporate Workshops" },
             ].map(l => (
               <Link key={l.label} href={l.href} style={{ display: "block", fontSize: "0.85rem", color: "rgba(255,255,255,0.55)", marginBottom: "0.45rem", transition: "color 200ms" }}

@@ -3,6 +3,7 @@
 // PAGE SECTIONS (in order):
 //   1. Hero             - Dark header
 //   2. FairlyAI Blog    - Substack RSS feed + subscribe embed
+//   (new) Mailing List  - General mailing list signup via Brevo (/api/subscribe)
 //   3. Executive Courses - Berkeley/Stanford course cards with registration links
 //   4. Corporate Workshops - Description + PDF flyer + link to /workshops form
 //   5. Bytesized AI CTA - Separate program explanation with link to /bytesized-ai
@@ -475,23 +476,8 @@ export default function EducationPage() {
         </div>
       </section>
 
-      {/* ── Bytesized AI ─────────────────────────────────────── */}
-      <section style={{ background: "linear-gradient(135deg, var(--ink-mid) 0%, var(--ink) 100%)", padding: "5rem 0", textAlign: "center" }}>
-        <div className="container">
-          <span className="label-tag label-tag-white">5-Minute Lessons</span>
-          <h2 style={{ color: "white", marginTop: "0.25rem", marginBottom: "1rem" }}>Bytesized AI</h2>
-          <div className="divider divider-center divider-white" />
-          <p style={{ color: "rgba(255,255,255,0.85)", maxWidth: "540px", margin: "0 auto 1.5rem", lineHeight: "1.75", fontSize: "0.95rem" }}>
-            Bytesized AI is our video and short-form series designed to explain AI concepts in five minutes or less. It's a completely separate program from the FairlyAI newsletter.
-          </p>
-          <p style={{ color: "rgba(255,255,255,0.6)", maxWidth: "480px", margin: "0 auto 2rem", lineHeight: "1.75", fontSize: "0.9rem" }}>
-            Quick, bite-sized AI lessons designed for lawyers. No technical background required, just five minutes and curiosity.
-          </p>
-          <Link href="/bytesized-ai" className="btn btn-slate">
-            Start Learning →
-          </Link>
-        </div>
-      </section>
+      {/* ── Mailing List ─────────────────────────────────────── */}
+      <MailingListSection />
 
       <style>{`
         @media (max-width: 768px) {
@@ -504,5 +490,151 @@ export default function EducationPage() {
         }
       `}</style>
     </>
+  );
+}
+
+// ─── Mailing List Section ────────────────────────────────────────────────────
+// Submits to /api/subscribe (functions/api/subscribe.ts — Cloudflare Pages Function)
+// which securely forwards the email to Brevo.
+function MailingListSection() {
+  const [email, setEmail] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [status, setStatus] = useState<"idle" | "sending" | "success" | "already" | "error">("idle");
+  const [errorMsg, setErrorMsg] = useState("");
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setStatus("sending");
+    setErrorMsg("");
+
+    try {
+      const res = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, firstName }),
+      });
+
+      const data = await res.json() as { success?: boolean; alreadySubscribed?: boolean; error?: string };
+
+      if (data.success && data.alreadySubscribed) {
+        setStatus("already");
+      } else if (data.success) {
+        setStatus("success");
+        setEmail("");
+        setFirstName("");
+      } else {
+        setStatus("error");
+        setErrorMsg(data.error ?? "Something went wrong. Please try again.");
+      }
+    } catch {
+      setStatus("error");
+      setErrorMsg("Network error. Please check your connection and try again.");
+    }
+  }
+
+  return (
+    <section style={{
+      background: "linear-gradient(135deg, var(--ink) 0%, #162038 100%)",
+      padding: "5rem 0",
+    }}>
+      <div className="container">
+        <div style={{
+          maxWidth: "600px",
+          margin: "0 auto",
+          textAlign: "center",
+        }}>
+          <span className="label-tag label-tag-white">Stay Connected</span>
+          <h2 style={{ color: "white", marginTop: "0.25rem", marginBottom: "1rem" }}>
+            Join Our Mailing List
+          </h2>
+          <div className="divider divider-center divider-white" />
+          <p style={{
+            color: "rgba(255,255,255,0.65)",
+            fontSize: "0.95rem",
+            lineHeight: "1.75",
+            marginBottom: "2.5rem",
+          }}>
+            Get updates on new research, AI education programs, and events from The Atticus Project — straight to your inbox.
+          </p>
+
+          {status === "success" ? (
+            <div style={{
+              background: "rgba(156,185,200,0.12)",
+              border: "1px solid rgba(156,185,200,0.3)",
+              borderRadius: "var(--radius-md)",
+              padding: "2rem",
+              color: "white",
+            }}>
+              <p style={{ fontSize: "1.5rem", marginBottom: "0.5rem" }}>✓</p>
+              <p style={{ fontWeight: "700", fontSize: "1.05rem", marginBottom: "0.25rem" }}>You&apos;re on the list!</p>
+              <p style={{ color: "rgba(255,255,255,0.6)", fontSize: "0.9rem" }}>Thanks for subscribing. We&apos;ll be in touch.</p>
+            </div>
+          ) : status === "already" ? (
+            <div style={{
+              background: "rgba(156,185,200,0.12)",
+              border: "1px solid rgba(156,185,200,0.3)",
+              borderRadius: "var(--radius-md)",
+              padding: "2rem",
+              color: "white",
+            }}>
+              <p style={{ fontWeight: "700", fontSize: "1.05rem", marginBottom: "0.25rem" }}>Already subscribed!</p>
+              <p style={{ color: "rgba(255,255,255,0.6)", fontSize: "0.9rem" }}>This email is already on our list. We&apos;ll keep you posted.</p>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "0.85rem" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.85rem" }}>
+                <input
+                  type="text"
+                  placeholder="First name (optional)"
+                  value={firstName}
+                  onChange={e => setFirstName(e.target.value)}
+                  style={{
+                    padding: "0.75rem 1rem",
+                    borderRadius: "var(--radius-sm)",
+                    border: "1px solid rgba(156,185,200,0.25)",
+                    background: "rgba(255,255,255,0.07)",
+                    color: "white",
+                    fontFamily: "var(--font-dm-sans)",
+                    fontSize: "0.9rem",
+                    outline: "none",
+                  }}
+                />
+                <input
+                  type="email"
+                  placeholder="Email address *"
+                  required
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  style={{
+                    padding: "0.75rem 1rem",
+                    borderRadius: "var(--radius-sm)",
+                    border: "1px solid rgba(156,185,200,0.25)",
+                    background: "rgba(255,255,255,0.07)",
+                    color: "white",
+                    fontFamily: "var(--font-dm-sans)",
+                    fontSize: "0.9rem",
+                    outline: "none",
+                  }}
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={status === "sending"}
+                className="btn btn-slate"
+                style={{ width: "100%", opacity: status === "sending" ? 0.7 : 1, cursor: status === "sending" ? "wait" : "pointer" }}
+              >
+                {status === "sending" ? "Subscribing…" : "Subscribe"}
+              </button>
+              {status === "error" && (
+                <p style={{ color: "#f87171", fontSize: "0.85rem", margin: 0 }}>{errorMsg}</p>
+              )}
+              <p style={{ color: "rgba(255,255,255,0.3)", fontSize: "0.78rem", margin: 0 }}>
+                No spam. Unsubscribe at any time.
+              </p>
+            </form>
+          )}
+        </div>
+      </div>
+    </section>
   );
 }

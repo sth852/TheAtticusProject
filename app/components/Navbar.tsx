@@ -107,7 +107,7 @@ export default function Navbar() {
           <div className="dropdown">
             <Link
               href="/education"
-              className={`nav-link${isActive("/education") || isActive("/bytesized-ai") ? " active" : ""}`}
+              className={`nav-link${isActive("/education") ? " active" : ""}`}
               style={{ display: "flex", alignItems: "center", gap: "0.25rem" }}
             >
               Education
@@ -119,7 +119,6 @@ export default function Navbar() {
               <Link href="/education">Overview</Link>
               <Link href="/education#blog">FairlyAI Blog</Link>
               <Link href="/education#courses">MCLE Courses</Link>
-              <Link href="/bytesized-ai">Bytesized AI</Link>
               <Link href="/education#workshops">Corporate Workshops</Link>
             </div>
           </div>
@@ -190,7 +189,6 @@ export default function Navbar() {
             { href: "/acord",           label: "ACORD",            sub: true },
             { href: "/labeling-handbook", label: "Labeling Handbook", sub: true },
             { href: "/education",       label: "Education" },
-            { href: "/bytesized-ai",    label: "Bytesized AI",     sub: true },
             { href: "/education#workshops", label: "Corporate Workshops", sub: true },
             { href: "/contact",         label: "Contact" },
             { href: "/support-us",      label: "Support Us" },
