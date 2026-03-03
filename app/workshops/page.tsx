@@ -14,8 +14,7 @@
 //   - Workshop topics list: update the bullet array in the left column
 // ─────────────────────────────────────────────────────────────────────────────
 
-// ⚠️  REPLACE THIS with your actual Formspree form ID (from formspree.io)
-const FORMSPREE_ID = "YOUR_FORMSPREE_ID";
+const FORMSPREE_ID = "mkovdgwv";
 
 import { useState } from "react";
 

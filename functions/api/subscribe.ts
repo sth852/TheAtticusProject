@@ -1,23 +1,21 @@
-// ─── Brevo Mailing List Subscription ─────────────────────────────────────────
+// ─── MailerLite Mailing List Subscription ────────────────────────────────────
 // Cloudflare Pages Function — runs as an Edge Worker alongside the static site.
-// Handles POST /api/subscribe and adds the email to your Brevo contact list.
+// Handles POST /api/subscribe and adds the email to your MailerLite group.
 //
 // SETUP (one-time, in Cloudflare Pages dashboard):
-//   1. Go to brevo.com → sign up for a free account
-//   2. In Brevo: Contacts → Lists → Create a list (e.g. "Atticus Mailing List")
-//      Copy the numeric List ID shown in the list settings
-//   3. In Brevo: Profile → SMTP & API → API Keys → Generate a new API key
-//   4. In Cloudflare Pages → your project → Settings → Environment Variables → Add:
-//        BREVO_API_KEY  =  <your Brevo API key>
-//        BREVO_LIST_ID  =  <your Brevo list ID (just the number, e.g. 3)>
-//   5. Redeploy — the form will go live automatically
+//   1. Go to app.mailerlite.com → Integrations → API → copy your API token
+//   2. In MailerLite: Subscribers → Groups → copy the numeric Group ID
+//   3. In Cloudflare Pages → your project → Settings → Environment Variables → Add:
+//        MAILERLITE_API_KEY  =  <your MailerLite API token>
+//        MAILERLITE_GROUP_ID =  <your MailerLite group ID (e.g. 180953803662558446)>
+//   4. Redeploy — the form will go live automatically
 //
 // The API key stays server-side (never exposed to the browser).
 // ─────────────────────────────────────────────────────────────────────────────
 
 interface Env {
-  BREVO_API_KEY: string;
-  BREVO_LIST_ID: string;
+  MAILERLITE_API_KEY: string;
+  MAILERLITE_GROUP_ID: string;
 }
 
 interface SubscribeBody {
@@ -37,7 +35,7 @@ export async function onRequestPost(context: {
   };
 
   // ── Validate env vars are configured ────────────────────────────────────────
-  if (!env.BREVO_API_KEY || !env.BREVO_LIST_ID) {
+  if (!env.MAILERLITE_API_KEY || !env.MAILERLITE_GROUP_ID) {
     return new Response(
       JSON.stringify({ error: "Mailing list not configured yet." }),
       { status: 503, headers: corsHeaders }
@@ -63,52 +61,46 @@ export async function onRequestPost(context: {
     );
   }
 
-  // ── Call Brevo API ────────────────────────────────────────────────────────────
+  // ── Call MailerLite API ───────────────────────────────────────────────────────
   try {
-    const listId = parseInt(env.BREVO_LIST_ID, 10);
+    const payload: Record<string, unknown> = {
+      email,
+      groups: [env.MAILERLITE_GROUP_ID],
+    };
 
-    const brevoRes = await fetch("https://api.brevo.com/v3/contacts", {
+    if (body.firstName) {
+      payload.fields = { name: body.firstName.trim() };
+    }
+
+    const mlRes = await fetch("https://connect.mailerlite.com/api/subscribers", {
       method: "POST",
       headers: {
-        accept: "application/json",
-        "api-key": env.BREVO_API_KEY,
-        "content-type": "application/json",
+        "Authorization": `Bearer ${env.MAILERLITE_API_KEY}`,
+        "Content-Type": "application/json",
+        "Accept": "application/json",
       },
-      body: JSON.stringify({
-        email,
-        attributes: body.firstName ? { FIRSTNAME: body.firstName.trim() } : {},
-        listIds: [listId],
-        updateEnabled: true, // re-adds contacts who previously unsubscribed
-      }),
+      body: JSON.stringify(payload),
     });
 
-    // 201 = created, 204 = updated (contact already existed, re-added to list)
-    if (brevoRes.status === 201 || brevoRes.status === 204) {
+    // 200 = existing subscriber updated, 201 = new subscriber created
+    if (mlRes.status === 200 || mlRes.status === 201) {
+      const data = (await mlRes.json()) as { data?: { status?: string } };
+      const alreadySubscribed = mlRes.status === 200 && data.data?.status === "active";
       return new Response(
-        JSON.stringify({ success: true }),
+        JSON.stringify({ success: true, alreadySubscribed }),
         { status: 200, headers: corsHeaders }
       );
     }
 
-    // Brevo returns 400 with code "duplicate_parameter" if already on the list
-    if (brevoRes.status === 400) {
-      const data = (await brevoRes.json()) as { code?: string };
-      if (data.code === "duplicate_parameter") {
-        return new Response(
-          JSON.stringify({ success: true, alreadySubscribed: true }),
-          { status: 200, headers: corsHeaders }
-        );
-      }
-    }
-
-    // Unexpected Brevo error — log status for debugging
-    console.error("Brevo unexpected status:", brevoRes.status);
+    // Unexpected MailerLite error — log for debugging
+    const errBody = await mlRes.text();
+    console.error("MailerLite unexpected status:", mlRes.status, errBody);
     return new Response(
       JSON.stringify({ error: "Could not subscribe. Please try again." }),
       { status: 502, headers: corsHeaders }
     );
   } catch (err) {
-    console.error("Brevo fetch error:", err);
+    console.error("MailerLite fetch error:", err);
     return new Response(
       JSON.stringify({ error: "Server error. Please try again later." }),
       { status: 500, headers: corsHeaders }
