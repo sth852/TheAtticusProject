@@ -83,18 +83,48 @@ export default function Home() {
       {/* ── Stats Bar ─────────────────────────────────────────── */}
       <section style={{ background: "var(--ink-mid)", borderBottom: "1px solid rgba(156,185,200,0.10)" }}>
         <div className="container">
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", padding: "1.75rem 0" }}>
-            {[
-              { num: "510+", label: "Legal Contracts" },
-              { num: "13,000+", label: "Expert Labels" },
-              { num: "41", label: "Clause Types" },
-              { num: "3", label: "Open Datasets" },
-            ].map((s, i) => (
-              <div key={i} style={{ textAlign: "center", borderRight: i < 3 ? "1px solid rgba(255,255,255,0.08)" : "none", padding: "0.5rem" }}>
-                <div className="stat-num">{s.num}</div>
-                <div className="stat-label">{s.label}</div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1px 1fr 1px 1fr", padding: "2.25rem 0", alignItems: "stretch" }}>
+
+            {/* Publications */}
+            <div style={{ textAlign: "center", padding: "0.5rem 2rem", display: "flex", flexDirection: "column" }}>
+              <div style={{ fontSize: "0.68rem", fontFamily: "var(--font-dm-sans)", fontWeight: "600", letterSpacing: "0.13em", textTransform: "uppercase", color: "var(--slate)", marginBottom: "0.6rem" }}>
+                Publications
               </div>
-            ))}
+              <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <div style={{ fontFamily: "var(--font-playfair)", fontSize: "1.55rem", fontWeight: "700", color: "var(--slate)", lineHeight: 1 }}>
+                  NeurIPS · EMNLP · ACL
+                </div>
+              </div>
+            </div>
+
+            {/* Divider */}
+            <div style={{ background: "rgba(156,185,200,0.15)" }} />
+
+            {/* Training Examples */}
+            <div style={{ textAlign: "center", padding: "0.5rem 2rem", display: "flex", flexDirection: "column" }}>
+              <div style={{ fontSize: "0.68rem", fontFamily: "var(--font-dm-sans)", fontWeight: "600", letterSpacing: "0.13em", textTransform: "uppercase", color: "var(--slate)", marginBottom: "0.6rem" }}>
+                Annotated Training Examples
+              </div>
+              <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <div className="stat-num">186,000+</div>
+              </div>
+            </div>
+
+            {/* Divider */}
+            <div style={{ background: "rgba(156,185,200,0.15)" }} />
+
+            {/* Executive Education */}
+            <div style={{ textAlign: "center", padding: "0.5rem 2rem", display: "flex", flexDirection: "column" }}>
+              <div style={{ fontSize: "0.68rem", fontFamily: "var(--font-dm-sans)", fontWeight: "600", letterSpacing: "0.13em", textTransform: "uppercase", color: "var(--slate)", marginBottom: "0.6rem" }}>
+                Executive Education
+              </div>
+              <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <div style={{ fontFamily: "var(--font-playfair)", fontSize: "1.55rem", fontWeight: "700", color: "var(--slate)", lineHeight: 1 }}>
+                  Berkeley · Stanford
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
       </section>
