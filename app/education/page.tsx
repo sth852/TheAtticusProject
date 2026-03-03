@@ -495,7 +495,7 @@ export default function EducationPage() {
 
 // ─── Mailing List Section ────────────────────────────────────────────────────
 // Submits to /api/subscribe (functions/api/subscribe.ts — Cloudflare Pages Function)
-// which securely forwards the email to Brevo.
+// which securely forwards the email to MailerLite.
 function MailingListSection() {
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -565,8 +565,8 @@ function MailingListSection() {
               padding: "2rem",
               color: "white",
             }}>
-              <p style={{ fontSize: "1.5rem", marginBottom: "0.5rem" }}>✓</p>
-              <p style={{ fontWeight: "700", fontSize: "1.05rem", marginBottom: "0.25rem" }}>You&apos;re on the list!</p>
+              <p style={{ fontSize: "1.5rem", marginBottom: "0.5rem", color: "white" }}>✓</p>
+              <p style={{ fontWeight: "700", fontSize: "1.05rem", marginBottom: "0.25rem", color: "white" }}>You&apos;re on the list!</p>
               <p style={{ color: "rgba(255,255,255,0.6)", fontSize: "0.9rem" }}>Thanks for subscribing. We&apos;ll be in touch.</p>
             </div>
           ) : status === "already" ? (
@@ -577,7 +577,7 @@ function MailingListSection() {
               padding: "2rem",
               color: "white",
             }}>
-              <p style={{ fontWeight: "700", fontSize: "1.05rem", marginBottom: "0.25rem" }}>Already subscribed!</p>
+              <p style={{ fontWeight: "700", fontSize: "1.05rem", marginBottom: "0.25rem", color: "white" }}>Already subscribed!</p>
               <p style={{ color: "rgba(255,255,255,0.6)", fontSize: "0.9rem" }}>This email is already on our list. We&apos;ll keep you posted.</p>
             </div>
           ) : (
@@ -626,7 +626,7 @@ function MailingListSection() {
                 {status === "sending" ? "Subscribing…" : "Subscribe"}
               </button>
               {status === "error" && (
-                <p style={{ color: "#f87171", fontSize: "0.85rem", margin: 0 }}>{errorMsg}</p>
+                <p style={{ color: "white", fontSize: "0.85rem", margin: 0 }}>{errorMsg}</p>
               )}
               <p style={{ color: "rgba(255,255,255,0.3)", fontSize: "0.78rem", margin: 0 }}>
                 No spam. Unsubscribe at any time.
